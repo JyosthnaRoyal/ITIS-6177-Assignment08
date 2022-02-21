@@ -6,28 +6,27 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const { check, validationResult } = require("express-validator");
 const { getConnection } = require("./helper");
 const OPTIONS = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-            title: "Swagger Express Excercise ",
-            version: "1.0.0",
-            description: "Express Swagger API",
-            termsOfService: "http://example.com/terms/",
-            contact: {
-                name: "Jyosthna Gandhodi",
-                url: "https://github.com/JyosthnaRoyal",
-                email: "jgandhod@uncc.edu",
-            },
+    "definition": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Swagger Express Excercise API Reference",
+            "version": "1.0.0",
+            "description": "A Simple Express Swagger API",
+            "termsOfService": "http://example.com/terms/",
+            "contact": {
+                "name": "Dileep Kumar Komatineni",
+                "url": "https://github.com/Dileepkomatineni",
+                "email": "dkomatin@uncc.edu"
+            }
         },
 
-        servers: [{
-            url: "http://67.205.170.182:3000/",
-            description: "Documentation of Swagger Express API ",
-        }, ],
+        "servers": [{
+            "url": "http://143.198.97.47:3000/",
+            "description": "Swagger Express API Documentation"
+        }]
     },
-    apis: ["./*.js"],
-};
-
+    "apis": ["./*.js"]
+}
 const PORT = process.env.PORT || 3000;
 const app = express();
 const specs = swaggerJsDoc(OPTIONS);
@@ -41,75 +40,81 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * @swagger
  * components:
  *   schemas:
- *     Company:
+ *     Agent:
  *       type: object
- *       required:
- *         - COMPANY_ID
- *         - COMPANY_NAME
- *         - COMPANY_CITY
  *       properties:
- *         COMPANY_ID:
+ *         AGENT_CODE:
  *           type: string
- *         COMPANY_NAME:
+ *         AGENT_NAME:
  *           type: string
- *         COMPANY_CITY:
+ *         WORKING_AREA:
  *           type: string
- *       example:
- *         COMPANY_ID: 21
- *         COMPANY_NAME: Accenture
- *         COMPANY_CITY: Bengaluru
+ *         COMMISSION:
+ *           type: decimal
+ *         PHONE_NO:
+ *           type: string
+ *         COUNTRY:
+ *           type: string
  */
+
+
+
 /**
  * @swagger
- * /company:
+ * /agent:
  *   post:
- *     summary: Registering a new company
- *     tags: [company]
+ *     summary: Register an agent
+ *     tags: [agent]
  *     requestBody:
  *       content:
  *          application/json:
  *              schema:
  *                type: object
  *                properties:
- *                  COMPANY_ID:
+ *                  AGENT_CODE:
  *                    type: string
- *                    example: 21
- *                  COMPANY_NAME:
+ *                    example: A013
+ *                  AGENT_NAME:
  *                    type: string
- *                    example: Accenture
- *                  COMPANY_CITY:
+ *                    example: Dileep
+ *                  WORKING_AREA:
  *                    type: string
- *                    example: Bengaluru
+ *                    example: Charlotte
+ *                  COMMISSION:
+ *                    type: decimal
+ *                    example: 0.99
+ *                  PHONE_NO:
+ *                    type: string
+ *                    example: 045-12309876
+ *                  COUNTRY:
+ *                    type: string
+ *                    example: USA
  *     responses:
  *       200:
- *         description: registered successfully
+ *         description: Succesfully registered
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       422:
- *         description:  Failed in Registration
+ *         description: Validation failed
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       500:
- *         description: Cannot  register
+ *         description: Could not register
  */
 
-app.post("/company", (req, res) => {
+app.post("/agent", (req, res) => {
     let body = req.body;
     getConnection()
         .then((conn) => {
             conn
-                .query("INSERT INTO COMPANY VALUES (?,?,?)", [
-                    body.COMPANY_ID,
-                    body.COMPANY_NAME,
-                    body.COMPANY_CITY,
-                ])
+                .query("INSERT INTO agents (AGENT_CODE, AGENT_NAME, WORKING_AREA, COMMISSION, PHONE_NO, COUNTRY) VALUES (?,?,?,?,?,?)", [body.AGENT_CODE, body.AGENT_NAME, body.WORKING_AREA, body.COMMISSION, body.PHONE_NO, body.COUNTRY])
                 .then((rows) => {
-                    conn.release();
                     res.json(rows);
+                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -122,36 +127,36 @@ app.post("/company", (req, res) => {
 });
 /**
  * @swagger
- * /companies:
+ * /agents:
  *   get:
- *     summary: Returns companies list
- *     tags: [company]
+ *     summary: Returns the list of all the agents
+ *     tags: [agent]
  *     responses:
  *       200:
- *         description: list of the companies
+ *         description: The list of the agents
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/company'
+ *                 $ref: '#/components/schemas/Agent'
  *       422:
- *         description: Failed in validation
+ *         description: Validation failed
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       500:
- *         description: Cannot  get companies rows
+ *         description: Could not get agents
  */
-app.get("/companies", (req, res) => {
+app.get("/agents", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query("SELECT * from company")
+                .query("SELECT * from agents")
                 .then((rows) => {
-                    conn.release();
                     res.json(rows);
+                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -162,54 +167,51 @@ app.get("/companies", (req, res) => {
             console.log(err);
         });
 });
-
 /**
  * @swagger
- * /company:
+ * /agent:
  *   put:
- *     summary: Updating a company city for a specified company_id
- *     tags: [company]
+ *     summary: Updates an agent information
+ *     tags: [agent]
  *     requestBody:
  *       content:
  *          application/json:
  *              schema:
  *                type: object
  *                properties:
- *                  COMPANY_ID:
+ *                  AGENT_CODE:
  *                    type: string
- *                    example: 21
- *                  COMPANY_CITY:
+ *                    example: A013
+ *                  AGENT_NAME:
  *                    type: string
- *                    example: Bengaluru_new
+ *                    example: Dileep K
+ * 
  *     responses:
  *       200:
- *         description: registered successfully
+ *         description: Succesfully updated
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       422:
- *         description:  Failed in Registration
+ *         description: Updation failed
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       500:
- *         description: Cannot  register
+ *         description: Could not update
  */
 
-app.put("/company", (req, res) => {
+app.put("/agent", (req, res) => {
     let body = req.body;
     getConnection()
         .then((conn) => {
             conn
-                .query("UPDATE COMPANY SET COMPANY_CITY = ? WHERE COMPANY_ID = ?", [
-                    body.COMPANY_CITY,
-                    body.COMPANY_ID,
-                ])
+                .query("UPDATE agents SET AGENT_NAME = ? WHERE AGENT_CODE = ?", [body.AGENT_NAME, body.AGENT_CODE])
                 .then((rows) => {
-                    conn.release();
                     res.json(rows);
+                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -220,54 +222,53 @@ app.put("/company", (req, res) => {
             console.log(err);
         });
 });
-
 /**
  * @swagger
- * /company:
+ * /agent:
  *   patch:
- *     summary: Updating company name for a specified company city
- *     tags: [company]
+ *     summary: Updates an agent information
+ *     tags: [agent]
  *     requestBody:
  *       content:
  *          application/json:
  *              schema:
  *                type: object
  *                properties:
- *                  COMPANY_NAME:
+ *                  AGENT_CODE:
  *                    type: string
- *                    example: Accenture_old
- *                  COMPANY_CITY:
+ *                    example: A013
+ *                  WORKING_AREA:
  *                    type: string
- *                    example: Bengaluru
+ *                    example: Cary
+ *                  COMMISSION:
+ *                    type: decimal
+ *                    example: 1.05
  *     responses:
  *       200:
- *         description: registered successfully
+ *         description: Succesfully Updated
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       422:
- *         description:  Failed in Registration
+ *         description: Updation failed
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       500:
- *         description: Cannot  register
+ *         description: Could not Update
  */
 
-app.patch("/company", (req, res) => {
+app.patch("/agent", (req, res) => {
     let body = req.body;
     getConnection()
         .then((conn) => {
             conn
-                .query("UPDATE COMPANY SET COMPANY_NAME = ? WHERE COMPANY_CITY = ?", [
-                    body.COMPANY_NAME,
-                    body.COMPANY_CITY,
-                ])
+                .query("UPDATE agents SET COMMISSION = ?, WORKING_AREA = ? WHERE AGENT_CODE = ?", [body.COMMISSION, body.WORKING_AREA, body.AGENT_CODE])
                 .then((rows) => {
-                    conn.release();
                     res.json(rows);
+                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -278,47 +279,45 @@ app.patch("/company", (req, res) => {
             console.log(err);
         });
 });
-
 /**
  * @swagger
- * /company/{id}:
+ * /agent/{id}:
  *   delete:
- *     summary: Deleteing a company with given id
- *     tags: [company]
+ *     summary: Deletes an agent with specified id
+ *     tags: [agent]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
- *           example: 21
+ *           example: A013
  *         required: true
- *         description: id  needs to be deleted
+ *         description: id that needs to be deleted
  *     responses:
  *       200:
- *         description: Deleted Succesfully .
+ *         description: Succesfully deleted.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       422:
- *         description: Failed in Validation
+ *         description: Validation failed
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       500:
- *         description: Cannot not delete a company
+ *         description: Couldn't delete agent
  */
-
-app.delete("/company/:id", (req, res) => {
+app.delete("/agent/:id", (req, res) => {
     let id = req.params.id;
     getConnection()
         .then((conn) => {
             conn
-                .query("DELETE FROM COMPANY WHERE COMPANY_ID = ?", id)
+                .query("DELETE FROM agents WHERE AGENT_CODE = ?", id)
                 .then((rows) => {
+                    res.json(rows);
                     conn.release();
-                    res.json(rows);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -329,15 +328,14 @@ app.delete("/company/:id", (req, res) => {
             console.log(err);
         });
 });
-
-app.get("/customers", (req, res) => {
+app.get("/orders", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query("SELECT * from customer")
+                .query("SELECT * from orders")
                 .then((rows) => {
+                    res.json(rows);
                     conn.release();
-                    res.json(rows);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -349,86 +347,34 @@ app.get("/customers", (req, res) => {
         });
 });
 
-app.get("/company", (req, res) => {
-    getConnection()
-        .then((conn) => {
-            conn
-                .query("SELECT * from company")
-                .then((rows) => {
-                    res.json(rows);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    conn.end();
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get("/daysorder", (req, res) => {
-    getConnection()
-        .then((conn) => {
-            conn
-                .query("SELECT * from daysorder")
-                .then((rows) => {
-                    res.json(rows);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    conn.end();
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get("/despatch", (req, res) => {
-    getConnection()
-        .then((conn) => {
-            conn
-                .query("SELECT * from despatch")
-                .then((rows) => {
-                    res.json(rows);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    conn.end();
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get("/foods", (req, res) => {
-    getConnection()
-        .then((conn) => {
-            conn
-                .query("SELECT * from foods")
-                .then((rows) => {
-                    res.json(rows);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    conn.end();
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get("/customer/:id", (req, res) => {
+app.get("/daysorder/:id", (req, res) => {
     var id = req.params.id;
     getConnection()
         .then((conn) => {
             conn
-                .query(`SELECT * from customer where CUST_CODE = ?`, id)
+                .query(`SELECT * from daysorder where CUST_CODE = ?`, id)
                 .then((rows) => {
                     res.json(rows);
+                    conn.release();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    conn.end();
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+app.get("/customer", (req, res) => {
+    var name = req.query.name;
+    getConnection()
+        .then((conn) => {
+            conn
+                .query(`SELECT * from customer where CUST_NAME =?`, name)
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -440,23 +386,4 @@ app.get("/customer/:id", (req, res) => {
         });
 });
 
-app.get("/orders", (req, res) => {
-    var amount = req.query.amount;
-    getConnection()
-        .then((conn) => {
-            conn
-                .query(`SELECT * from orders where ORD_AMOUNT = ?`, amount)
-                .then((rows) => {
-                    console.log(rows);
-                    res.json(rows);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    conn.end();
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
