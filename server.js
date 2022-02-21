@@ -144,7 +144,7 @@ app.post("/company", (req, res) => {
  *       500:
  *         description: Cannot  get companies rows
  */
-app.get("/company", (req, res) => {
+app.get("/companies", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
