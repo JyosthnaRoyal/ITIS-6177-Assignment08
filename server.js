@@ -46,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
  *     Company:
  *       type: object
  *       required:
- *         - companyId
- *         - companyName
- *         - companyCity
+ *         - COMPANY_ID
+ *         - COMPANY_NAME
+ *         - COMPANY_CITY
  *       properties:
  *         COMPANY_ID:
  *           type: string
@@ -134,7 +134,7 @@ app.post("/company", (req, res) => {
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Company'
+ *                 $ref: '#/components/schemas/company'
  *       422:
  *         description: Failed in validation
  *         content:
