@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * @swagger
  * components:
  *   schemas:
- *     Company:
+ *     company:
  *       type: object
  *       required:
  *         - COMPANY_ID
@@ -106,7 +106,7 @@ app.post("/company", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query("INSERT INTO COMPANY (COMPANY_ID,COMPANY_NAME,COMPANY_CITY) VALUES (?,?,?)", [body.COMPANY_ID, body.COMPANY_NAME, body.COMPANY_CITY])
+                .query("INSERT INTO COMPANY VALUES (?,?,?)", [body.COMPANY_ID, body.COMPANY_NAME, body.COMPANY_CITY])
                 .then((rows) => {
                     conn.release();
                     res.json(rows);
