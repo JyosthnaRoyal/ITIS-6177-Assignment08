@@ -6,28 +6,27 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const { check, validationResult } = require("express-validator");
 const { getConnection } = require("./helper");
 const OPTIONS = {
-    "definition": {
-        "openapi": "3.0.0",
-        "info": {
-            "title": "Swagger Express Excercise ",
-            "version": "1.0.0",
-            "description": "Express Swagger API",
-            "termsOfService": "http://example.com/terms/",
-            "contact": {
-                "name": "Jyosthna Gandhodi",
-                "url": "https://github.com/JyosthnaRoyal",
-                "email": "jgandhod@uncc.edu"
-            }
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Swagger Express Excercise ",
+            version: "1.0.0",
+            description: "Express Swagger API",
+            termsOfService: "http://example.com/terms/",
+            contact: {
+                name: "Jyosthna Gandhodi",
+                url: "https://github.com/JyosthnaRoyal",
+                email: "jgandhod@uncc.edu",
+            },
         },
 
-        "servers": [{
-            "url": "http://67.205.170.182:3000/",
-            "description": "Documentation of Swagger Express API "
-        }]
+        servers: [{
+            url: "http://localhost:3000/",
+            description: "Documentation of Swagger Express API ",
+        }, ],
     },
-    "apis": ["./*.js"]
-}
-
+    apis: ["./*.js"],
+};
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -38,12 +37,11 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
 /**
  * @swagger
  * components:
  *   schemas:
- *     company:
+ *     Company:
  *       type: object
  *       required:
  *         - COMPANY_ID
@@ -99,14 +97,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
  *         description: Cannot  register
  */
 
-
-
 app.post("/company", (req, res) => {
     let body = req.body;
     getConnection()
         .then((conn) => {
             conn
-                .query("INSERT INTO COMPANY VALUES (?,?,?)", [body.COMPANY_ID, body.COMPANY_NAME, body.COMPANY_CITY])
+                .query("INSERT INTO COMPANY VALUES (?,?,?)", [
+                    body.COMPANY_ID,
+                    body.COMPANY_NAME,
+                    body.COMPANY_CITY,
+                ])
                 .then((rows) => {
                     conn.release();
                     res.json(rows);
@@ -203,7 +203,10 @@ app.put("/company", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query("UPDATE COMPANY SET COMPANY_CITY = ? WHERE COMPANY_ID = ?", [body.COMPANY_CITY, body.COMPANY_ID])
+                .query("UPDATE COMPANY SET COMPANY_CITY = ? WHERE COMPANY_ID = ?", [
+                    body.COMPANY_CITY,
+                    body.COMPANY_ID,
+                ])
                 .then((rows) => {
                     conn.release();
                     res.json(rows);
@@ -258,7 +261,10 @@ app.patch("/company", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query("UPDATE COMPANY SET COMPANY_NAME = ? WHERE COMPANY_CITY = ?", [body.COMPANY_NAME, body.COMPANY_CITY])
+                .query("UPDATE COMPANY SET COMPANY_NAME = ? WHERE COMPANY_CITY = ?", [
+                    body.COMPANY_NAME,
+                    body.COMPANY_CITY,
+                ])
                 .then((rows) => {
                     conn.release();
                     res.json(rows);
@@ -295,7 +301,7 @@ app.patch("/company", (req, res) => {
  *             schema:
  *               type: object
  *       422:
- *         description: Failed in Validation 
+ *         description: Failed in Validation
  *         content:
  *           application/json:
  *             schema:
