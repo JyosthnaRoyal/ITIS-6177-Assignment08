@@ -21,7 +21,7 @@ const OPTIONS = {
         },
 
         servers: [{
-            url: "http://localhost:3000/",
+            url: "http://67.205.170.182:3000/",
             description: "Documentation of Swagger Express API ",
         }, ],
     },
