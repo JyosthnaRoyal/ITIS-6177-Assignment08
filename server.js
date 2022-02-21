@@ -129,7 +129,7 @@ app.post("/agent", (req, res) => {
  * @swagger
  * /agents:
  *   get:
- *     summary: Returns the list of all the agents
+ *     summary: Returning the list of all the agents
  *     tags: [agent]
  *     responses:
  *       200:
@@ -171,7 +171,7 @@ app.get("/agents", (req, res) => {
  * @swagger
  * /agent:
  *   put:
- *     summary: Updates an agent information
+ *     summary: Updating  agent information
  *     tags: [agent]
  *     requestBody:
  *       content:
