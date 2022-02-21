@@ -309,6 +309,27 @@ app.patch("/agent", (req, res) => {
  *       500:
  *         description: Couldn't delete agent
  */
+
+app.delete("/agent/:id", (req, res) => {
+    let id = req.params.id;
+    getConnection()
+        .then((conn) => {
+            conn
+                .query("DELETE FROM agents WHERE AGENT_CODE = ?", id)
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    conn.end();
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
 app.get("/customers", (req, res) => {
     getConnection()
         .then((conn) => {
