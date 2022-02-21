@@ -14,15 +14,15 @@ const OPTIONS = {
             "description": "A Simple Express Swagger API",
             "termsOfService": "http://example.com/terms/",
             "contact": {
-                "name": "Dileep Kumar Komatineni",
-                "url": "https://github.com/Dileepkomatineni",
-                "email": "dkomatin@uncc.edu"
+                "name": "Jyosthna",
+                "url": "https://github.com/JyosthnaRoyal",
+                "email": "jgandhod@uncc.edu"
             }
         },
 
         "servers": [{
-            "url": "http://143.198.97.47:3000/",
-            "description": "Swagger Express API Documentation"
+            "url": "http://67.205.170.182:3000/",
+            "description": "Swagger Express API"
         }]
     },
     "apis": ["./*.js"]
@@ -63,7 +63,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * @swagger
  * /agent:
  *   post:
- *     summary: Register an agent
+ *     summary: Registering an agent
  *     tags: [agent]
  *     requestBody:
  *       content:
@@ -73,22 +73,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
  *                properties:
  *                  AGENT_CODE:
  *                    type: string
- *                    example: A013
+ *                    example: A019
  *                  AGENT_NAME:
  *                    type: string
- *                    example: Dileep
+ *                    example: Jyosthna
  *                  WORKING_AREA:
  *                    type: string
- *                    example: Charlotte
+ *                    example: Bengaluru
  *                  COMMISSION:
  *                    type: decimal
- *                    example: 0.99
+ *                    example: 0.34
  *                  PHONE_NO:
  *                    type: string
- *                    example: 045-12309876
+ *                    example: 123-12345678
  *                  COUNTRY:
  *                    type: string
- *                    example: USA
+ *                    example: India
  *     responses:
  *       200:
  *         description: Succesfully registered
@@ -103,7 +103,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  *             schema:
  *               type: object
  *       500:
- *         description: Could not register
+ *         description: Cannot  register
  */
 
 app.post("/agent", (req, res) => {
@@ -181,10 +181,10 @@ app.get("/agents", (req, res) => {
  *                properties:
  *                  AGENT_CODE:
  *                    type: string
- *                    example: A013
+ *                    example: A019
  *                  AGENT_NAME:
  *                    type: string
- *                    example: Dileep K
+ *                    example: Jyo
  * 
  *     responses:
  *       200:
@@ -194,13 +194,13 @@ app.get("/agents", (req, res) => {
  *             schema:
  *               type: object
  *       422:
- *         description: Updation failed
+ *         description: Updating failed
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *       500:
- *         description: Could not update
+ *         description: Cannot not update
  */
 
 app.put("/agent", (req, res) => {
@@ -226,7 +226,7 @@ app.put("/agent", (req, res) => {
  * @swagger
  * /agent:
  *   patch:
- *     summary: Updates an agent information
+ *     summary: Updating  agent information
  *     tags: [agent]
  *     requestBody:
  *       content:
@@ -236,16 +236,16 @@ app.put("/agent", (req, res) => {
  *                properties:
  *                  AGENT_CODE:
  *                    type: string
- *                    example: A013
+ *                    example: A019
  *                  WORKING_AREA:
  *                    type: string
- *                    example: Cary
+ *                    example: Tirupathi
  *                  COMMISSION:
  *                    type: decimal
- *                    example: 1.05
+ *                    example: 2.08
  *     responses:
  *       200:
- *         description: Succesfully Updated
+ *         description: Succesfuly Updated
  *         content:
  *           application/json:
  *             schema:
@@ -290,7 +290,7 @@ app.patch("/agent", (req, res) => {
  *         name: id
  *         schema:
  *           type: string
- *           example: A013
+ *           example: A019
  *         required: true
  *         description: id that needs to be deleted
  *     responses:
