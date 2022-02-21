@@ -309,33 +309,14 @@ app.patch("/agent", (req, res) => {
  *       500:
  *         description: Couldn't delete agent
  */
-app.delete("/agent/:id", (req, res) => {
-    let id = req.params.id;
+app.get("/customers", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query("DELETE FROM agents WHERE AGENT_CODE = ?", id)
+                .query("SELECT * from customer")
                 .then((rows) => {
-                    res.json(rows);
                     conn.release();
-                })
-                .catch((err) => {
-                    console.log(err);
-                    conn.end();
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-app.get("/orders", (req, res) => {
-    getConnection()
-        .then((conn) => {
-            conn
-                .query("SELECT * from orders")
-                .then((rows) => {
                     res.json(rows);
-                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -347,15 +328,13 @@ app.get("/orders", (req, res) => {
         });
 });
 
-app.get("/daysorder/:id", (req, res) => {
-    var id = req.params.id;
+app.get("/company", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query(`SELECT * from daysorder where CUST_CODE = ?`, id)
+                .query("SELECT * from company")
                 .then((rows) => {
                     res.json(rows);
-                    conn.release();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -366,15 +345,89 @@ app.get("/daysorder/:id", (req, res) => {
             console.log(err);
         });
 });
-app.get("/customer", (req, res) => {
-    var name = req.query.name;
+
+app.get("/daysorder", (req, res) => {
     getConnection()
         .then((conn) => {
             conn
-                .query(`SELECT * from customer where CUST_NAME =?`, name)
+                .query("SELECT * from daysorder")
                 .then((rows) => {
                     res.json(rows);
-                    conn.release();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    conn.end();
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/despatch", (req, res) => {
+    getConnection()
+        .then((conn) => {
+            conn
+                .query("SELECT * from despatch")
+                .then((rows) => {
+                    res.json(rows);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    conn.end();
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/foods", (req, res) => {
+    getConnection()
+        .then((conn) => {
+            conn
+                .query("SELECT * from foods")
+                .then((rows) => {
+                    res.json(rows);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    conn.end();
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/customer/:id", (req, res) => {
+    var id = req.params.id;
+    getConnection()
+        .then((conn) => {
+            conn
+                .query(`SELECT * from customer where CUST_CODE = ?`, id)
+                .then((rows) => {
+                    res.json(rows);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    conn.end();
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/orders", (req, res) => {
+    var amount = req.query.amount;
+    getConnection()
+        .then((conn) => {
+            conn
+                .query(`SELECT * from orders where ORD_AMOUNT = ?`, amount)
+                .then((rows) => {
+                    console.log(rows);
+                    res.json(rows);
                 })
                 .catch((err) => {
                     console.log(err);
