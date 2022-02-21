@@ -125,7 +125,7 @@ app.post("/company", (req, res) => {
  * /companies:
  *   get:
  *     summary: Returns companies list
- *     tags: [Company]
+ *     tags: [company]
  *     responses:
  *       200:
  *         description: list of the companies
@@ -278,7 +278,7 @@ app.patch("/company", (req, res) => {
  * /company/{id}:
  *   delete:
  *     summary: Deleteing a company with given id
- *     tags: [Company]
+ *     tags: [company]
  *     parameters:
  *       - in: path
  *         name: id
