@@ -106,7 +106,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
  *         description: Cannot  register
  */
 
-app.post("/agent", (req, res) => {
+app.post("/agent", [
+    check("AGENT_CODE", "AGENT_CODE cannot be empty").isLength({
+        min: 1,
+    }),
+    check("AGENT_NAME", "AGENT_NAME cannot be empty").isLength({
+        min: 1,
+    }),
+    check("WORKING_AREA", "WORKING_AREA cannot be empty").isLength({
+        min: 1,
+    }),
+    check("COMMISSION", "COMMISSION cannot be empty").isLength({
+        min: 1,
+    }),
+    check("PHONE_NO", "PHONE_NO cannot be empty").isLength({
+        min: 1,
+    }),
+    check("COUNTRY", "COUNTRY cannot be empty").isLength({
+        min: 1,
+    }),
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     let body = req.body;
     getConnection()
         .then((conn) => {
@@ -203,7 +226,18 @@ app.get("/agents", (req, res) => {
  *         description: Cannot not update
  */
 
-app.put("/agent", (req, res) => {
+app.put("/agent", [
+    check("AGENT_CODE", "AGENT_CODE cannot be empty").isLength({
+        min: 1,
+    }),
+    check("AGENT_NAME", "AGENT_NAME cannot be empty").isLength({
+        min: 1,
+    }),
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     let body = req.body;
     getConnection()
         .then((conn) => {
@@ -260,7 +294,21 @@ app.put("/agent", (req, res) => {
  *         description: Could not Update
  */
 
-app.patch("/agent", (req, res) => {
+app.patch("/agent", [
+    check("AGENT_CODE", "AGENT_CODE cannot be empty").isLength({
+        min: 1,
+    }),
+    check("WORKING_AREA", "WORKING_AREA cannot be empty").isLength({
+        min: 1,
+    }),
+    check("COMMISSION", "COMMISSION cannot be empty").isLength({
+        min: 1,
+    }),
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
     let body = req.body;
     getConnection()
         .then((conn) => {
@@ -310,7 +358,11 @@ app.patch("/agent", (req, res) => {
  *         description: Couldn't delete agent
  */
 
-app.delete("/agent/:id", (req, res) => {
+app.delete("/agent/:id", [
+    check("id", "AGENT_CODE cannot be empty").isLength({
+        min: 1,
+    }),
+], (req, res) => {
     let id = req.params.id;
     getConnection()
         .then((conn) => {
